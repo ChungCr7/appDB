@@ -1,0 +1,100 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Giỏ hàng
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+            </ol>
+        </div>
+    </div>
+    {{#unless products.length}}
+    <div style="margin-top: 30px; justify-content: center; display: flex;">
+        <div style="width: 500px"><img src="/img/cart-empty.png" alt="">
+            <h3 style="font-weight: 450; text-align: center; margin: 30px 0 70px 0;">GIỎ HÀNG TRỐNG</h3>
+        </div>
+    </div>
+    <a class="btn btn-outline-success my-2 my-sm-0 btn-back" href="/" style="margin-left: 20%;">
+        <span class="oi oi-arrow-left"></span>
+        QUAY LẠI CỬA HÀNG
+    </a>
+    {{/unless}}
+    {{#if products.length}}
+    <div class="container" style="margin-top: 35px;">
+        <div class="row"
+            style="border: 1px solid rgb(36, 202, 72); font-size: 16px; background-color: rgb(19, 129, 5); color: #fff; padding-top: 5px; padding-bottom: 5px;">
+            <div class="col-4" style="padding-left: 55px;">Sản phẩm</div>
+            <div class="col-2">Loại sản phẩm</div>
+            <div class="col-2">Đơn giá(VNĐ)</div>
+            <div class="col-1">Số lượng</div>
+            <div class="col-2">Số Tiền(VNĐ)</div>
+            <div class="col-1">Thao tác</div>
+
+        </div>
+
+        {{#each products}}
+        <div class="row" style="border: 1px solid rgb(36, 202, 72);">
+            <div class="col-4">
+                <a href="/san-pham/{{this.productId.slug}}" style="display: flex;">
+                    <img style="width: 170px; height:170px; margin: 15px" src="{{this.productId.img.[3]}}" alt="">
+                    <p style="color: black; padding-top: 78px;">{{this.productId.name}}</p>
+                </a>
+            </div>
+            <div class="col-2" style="padding-top: 78px;">{{this.productId.product_type}}</div>
+            <div class="col-2" style="padding-top: 78px;">{{this.productId.price}}</div>
+            <div class="col-1" style="padding-top: 78px;">{{this.quantity}}</div>
+            <div class="col-2" style="padding-top: 78px;">{{multiplication this.quantity this.productId.price}}</div>
+            <div class="col-1" style="padding-top: 72px;">
+                <form action="/cart-delete-item" method="POST">
+                    <button class="btn btn-click btn-remove" type="submit">Xóa</button>
+                    <input type="hidden" name="productId" value="{{this.productId._id}}">
+                </form>
+            </div>
+        </div>
+        {{/each}}
+
+        <div style="margin-top: 15px;">
+            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px">
+                Thông tin giao hàng
+            </div>
+            <form action="/create-order" method="POST">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <div>Tên nguời nhận: (*)</div>
+                            <input type="text" class="form-control" id="name" name="name" value="{{user.lastname}}">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <div>Email:</div>
+                            <div>{{user.email}}</div>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <div class="form-group">
+                            <div>Số điện thoại: (*)</div>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{user.phone}}">
+                        </div>
+                        <div class="form-group">
+                            <div>Địa chỉ: (*)</div>
+                            <input type="text" class="form-control" id="address" name="address"
+                                value="{{user.address}}">
+                        </div>
+                    </div>
+                    <input type="hidden" name="status" value="Chờ xác nhận">
+                    <div class="col-1"></div>
+                    <div class="col-3"
+                        style="font-size: 20px; border: solid 1px rgb(13, 189, 66); justify-content: center; background-color: rgb(219, 234, 196)">
+                        <div style="margin-top: 25px; display: flex; margin-bottom: 5px">Tổng tiền:&nbsp;<p
+                                style="font-weight: 700;">
+                                {{total}}</p>&nbsp;(VNĐ)</div>
+                        <button class="btn btn-click btn-cart" type="submit" style="font-size: 20px">Mua hàng</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {{/if}}
+</div>

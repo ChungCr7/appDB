@@ -1,0 +1,45 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Sinh tố
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sinh tố</li>
+            </ol>
+        </div>
+    </div>
+    <div style="margin-left: 18%; margin-right: 18%; margin-top: 80px; margin-bottom: 100px;">
+        <div class="row">
+            {{#each products}}
+            <div class="col-sm-6 col-lg-3 product-list">
+                <div class="card card-product">
+                    <a href="/san-pham/{{this.slug}}">
+                        <img class="card-img-top" src="/{{this.img.[3]}}" alt="{{this.name}}">
+                    </a>
+
+                    <div class="product-info">
+                        <div>
+                            <a href="/san-pham/{{this.slug}}" class="card-title-product">
+                                {{this.name}}
+                            </a>
+                        </div>
+                        <div style="display: flex;">
+                            <p class="card-text card-text-product">{{this.price}} <sup>đ</sup></p>
+                            <form action="/gio-hang" method="POST">
+                                <div style="position: absolute; right: 17px;">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button class="btn btn-click btn-cart btn-addToCart" type="submit">Đặt ngay</button>
+                                </div>
+                                <input type="hidden" name="productId" value="{{this._id}}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Đánh giá sản phẩm ({{product.name}})
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đánh giá sản phẩm {{product.name}}</li>
+            </ol>
+        </div>
+    </div>
+
+    <div style="margin: 50px 25% 0 25%; border: solid 1px rgb(20, 182, 79); text-align: center; border-radius: 10px;">
+        <form method="POST" action="/danh-gia" enctype="multipart/form-data">
+            <input type="hidden" name="productId" value="{{product._id}}">
+            <ul class="rating" style="font-size: 40px; justify-content: center;">
+                <input type="hidden" class="rating-star" name="rating" value="3">
+                <li class="rating-item" data-rate="1"></li>
+                <li class="rating-item" data-rate="2"></li>
+                <li class="rating-item active" data-rate="3"></li>
+                <li class="rating-item" data-rate="4"></li>
+                <li class="rating-item" data-rate="5"></li>
+            </ul>
+
+            <div class="form-group">
+                <label for="comment">Nhận xét của bạn</label>
+                <textarea class="form-control" id="comment" name="comment" style="height: 230px;" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="imgRating">Ảnh minh họa (Vui lòng chọn 1 ảnh)</label>
+                <input type="file" class="form-control" id="imgRating" name="imgRating" multiple required>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="preview-images"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-click btn-cart" style="margin-bottom: 5px;">Đăng</button>
+        </form>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Multiple images preview in browser - trungquandev.com
+                let imagesPreview = function (input, placeToInsertImagePreview) {
+                    if (input.files) {
+                        let filesAmount = input.files.length;
+                        for (i = 0; i < filesAmount; i++) {
+                            let reader = new FileReader();
+                            reader.onload = function (event) {
+                                $($.parseHTML("<img>")).attr("src", event.target.result).appendTo(placeToInsertImagePreview);
+                            }
+                            reader.readAsDataURL(input.files[i]);
+                        }
+                    }
+                };
+                $("#imgRating").on("change", function () {
+                    imagesPreview(this, "div.preview-images");
+                });
+            });
+        </script>
+        <script>
+            const container = document.querySelector('.rating');
+            const ratingStar = document.querySelector('.rating-star');
+            const items = container.querySelectorAll('.rating-item')
+            container.onclick = e => {
+                const elClass = e.target.classList;
+                // change the rating if the user clicks on a different star
+                if (!elClass.contains('active')) {
+                    items.forEach( // reset the active class on the star
+                        item => item.classList.remove('active')
+                    );
+                    ratingStar.value = e.target.getAttribute("data-rate")
+                    console.log(e.target.getAttribute("data-rate"));
+                    console.log(ratingStar.value)
+                    elClass.add('active'); // add active class to the clicked star
+                }
+            };
+        </script>
+
+        <style>
+            .rating {
+                display: flex;
+                padding: 0;
+                margin: 0;
+            }
+
+            .rating li {
+                list-style-type: none
+            }
+
+            .rating-item {
+                border: 1px solid #fff;
+                cursor: pointer;
+                font-size: 2em;
+                color: yellow;
+            }
+
+            /* initial: make all stars full */
+            .rating-item::before {
+                content: "\2605";
+            }
+
+            /* make until the clicked star (the rest) empty */
+            .rating-item.active~.rating-item::before {
+                content: "\2606";
+            }
+
+            /* on hover make all full */
+            .rating:hover .rating-item::before {
+                content: "\2605";
+            }
+
+            /* make until the hovered (the rest) empty */
+            .rating-item:hover~.rating-item::before {
+                content: "\2606";
+            }
+        </style>
+    </div>
+
+</div>

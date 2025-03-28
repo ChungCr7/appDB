@@ -1,0 +1,53 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Tìm kiếm
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tìm kiếm</li>
+            </ol>
+        </div>
+    </div>
+    <div class="div-prod-search">
+        <div class="row">
+
+            {{#each productsSearch}}
+            <div class="col-sm-6 col-lg-3 product-list">
+                <div class="card card-product">
+                    <a href="/san-pham/{{this.slug}}">
+                        <img class="card-img-top" src="/{{this.img.[3]}}" alt="{{this.name}}">
+                    </a>
+
+                    <div class="product-info">
+                        <div>
+                            <a href="/san-pham/{{this.slug}}" class="card-title-product">
+                                {{this.name}}
+                            </a>
+                        </div>
+                        <div class="div-detail-prod">
+                            <p class="card-text card-text-product">{{this.price}} <sup>đ</sup></p>
+                            <form action="/gio-hang" method="POST">
+                                <div class="div-order">
+                                    <button class="btn btn-click btn-cart" type="submit">Đặt ngay</button>
+                                </div>
+                                <input type="hidden" name="productId" value="{{this._id}}">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="not-found">
+                <h2>Không tìm thấy sản phẩm nào</h2>
+                <a class="btn btn-outline-success my-2 my-sm-0 btn-back" href="/">
+                    <span class="oi oi-arrow-left"></span>
+                    QUAY LẠI CỬA HÀNG
+                </a>
+            </div>
+            {{/each}}
+
+        </div>
+    </div>
+</div>

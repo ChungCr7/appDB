@@ -1,0 +1,286 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                {{product.name}}
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{product.name}}</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row" style="font-weight: 300; margin-left: 9%">
+        <div class="col-lg-5 col-12">
+            <div style="margin: 50px 0 30px 30%;">
+                <img class="tab-pane active" src="/{{product.img.[3]}}" alt="">
+                <img class="tab-pane" src="/{{product.img.[2]}}" alt="">
+                <img class="tab-pane" src="/{{product.img.[1]}}" alt="">
+                <img class="tab-pane" src="/{{product.img.[0]}}" alt="">
+            </div>
+            <div style="margin-left: 30%; margin-top: 20px">
+                <img class="tab-link active" src="/{{product.img.[3]}}" alt="">
+                <img class="tab-link" src="/{{product.img.[2]}}" alt="">
+                <img class="tab-link" src="/{{product.img.[1]}}" alt="">
+                <img class="tab-link" src="/{{product.img.[0]}}" alt="">
+            </div>
+        </div>
+
+        <div class="product-description col-lg-7 col-12" style="margin-top:150px; padding-left: 8%">
+            <div>
+                <div style="text-transform: uppercase; font-size:16px">
+                    {{product.product_type}}
+                </div>
+                <div style="font-size:16px; display: inline-flex;">
+                    Thương hiệu:&nbsp;<p style="color: #91ad41;">{{product.thuong_hieu}}</p>&nbsp;| Tình trạng:&nbsp;<p
+                        style="color: #91ad41;">{{product.tinh_trang}}</p>
+                </div>
+                <div style="font-size:35px; font-weight: 500;">
+                    <p>{{product.name}}</p>
+                </div>
+                <div>
+                    <span style="color: #91ad41;font-size: 25px; font-weight: 500;">{{product.price}}<sup>đ</sup>
+                    </span>
+                </div>
+                <form action="/gio-hang" method="POST">
+                    <div style="display: flex; margin-top: 25px">
+                        <div>
+                            <h5 style="padding-top: 5px; margin-right: 35px;">Số lượng:</h5>
+                        </div>
+                        <button class="btn qty-btn qty-minus" type="button">-</button>
+                        <input class="" type="text" name="quantity" id="quantity" value="1"
+                            style="width: 50px; text-align: center" minlength="1" maxlength="2" pattern="[1-9]{1,2}">
+                        <button type="button" class="btn qty-btn qty-plus">+</button>
+                    </div>
+                    <button class="btn btn-cart btn-click" type="submit"
+                        style="margin-top: 40px; padding: 12px; font-size: 20px">Thêm vào giỏ
+                        hàng</button>
+                    <input type="hidden" name="productId" value="{{product._id}}">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="banner-product">
+        <h1 style="color: #91ad41; font-size: 70px; padding-top: 30px">OARS</h1>
+        <h3 style="font-weight: 400;">Thực phẩm an toàn 100%</h3>
+    </div>
+
+    <div class="product-detail" style="margin-left: 20%; margin-right: 20%;">
+        <div>
+            <div class="prod-title">
+                <p>Mô tả sản phẩm</p>
+            </div>
+            <div class="prod-content">
+                {{product.description}}
+                <div style="margin: 5px 0;">
+                    <Strong style=" font-weight: 500">Bảo quản: bảo quản lạnh, tránh ánh nắng trực tiếp mặt trời chiếu
+                        thẳng vào.</Strong>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="prod-title">
+                <p>Đánh giá sản phẩm</p>
+            </div>
+            <div style="background-color: rgb(5, 135, 57); padding:15px; color: #fff">
+                <div style="display: flex;">
+                    <div style="font-size: 35px;">
+                        {{totalRating}}
+                    </div>
+                    {{#if product.danh_gia}}
+                    <div style="margin-top: 20px; margin-left: 5px">Trên 5</div>
+                    {{/if}}
+                </div>
+                <ul class="rating">
+                    <li class="rating-item" style="border: none;"></li>
+                    <li class="rating-item" style="border: none;"></li>
+                    <li class="rating-item" style="border: none;"></li>
+                    <li class="rating-item" style="border: none;"></li>
+                    <li class="rating-item active" style="border: none;"></li>
+                </ul>
+                <div>({{product.danh_gia.length}} đánh giá)</div>
+            </div>
+            <div class="prod-content">
+                {{#unless product.danh_gia}}
+                <div style="border-bottom: 1px solid black; padding-bottom: 5px;">Chưa có đánh giá nào</div>
+                {{/unless}}
+
+                {{#each product.danh_gia}}
+                <div style="padding: 25px; border-bottom: 1px solid black">
+                    <div style="display: flex;">
+                        <img src="/img/user.png" alt="" class="user-avatar">
+                        <div style="font-size: 13px; font-weight: 400">
+                            {{this.ratingId.user.firstname}}
+                            {{this.ratingId.user.lastname}}
+                        </div>
+
+                    </div>
+                    <div style="font-size: 10px;">
+                        {{this.ratingId.createdAt}}
+                    </div>
+                    <div>
+                        <ul class="rating">
+                            {{#unless (sub this.ratingId.rating 1)}}
+                            <li class="rating-item active"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            {{/unless}}
+                            {{#unless (sub this.ratingId.rating 2)}}
+                            <li class="rating-item"></li>
+                            <li class="rating-item active"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            {{/unless}}
+                            {{#unless (sub this.ratingId.rating 3)}}
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item active"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            {{/unless}}
+                            {{#unless (sub this.ratingId.rating 4)}}
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item active"></li>
+                            <li class="rating-item"></li>
+                            {{/unless}}
+                            {{#unless (sub this.ratingId.rating 5)}}
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item"></li>
+                            <li class="rating-item active"></li>
+                            {{/unless}}
+
+                        </ul>
+                        <div style="margin-left: 20px;">
+                            {{this.ratingId.comment}}
+                        </div>
+                        <div style="margin-top: 10px; margin-left: 20px; margin-bottom: 15px">
+                            <img src="/{{this.ratingId.imgRating}}" alt="" style="height: 150px;">
+                        </div>
+
+                        {{#if ../isAuthenticatedAdmin}}
+                        <div style="background-color: antiquewhite; margin-left: 10%; padding:10px; font-size:15px">
+                            <p style="color: rgb(202, 61, 181); margin-bottom: 10px; font-weight: 500">
+                                Phản hồi của người bán
+                            </p>
+                            {{#if this.ratingId.feedback}}
+                            <div style="font-size: 14px;">{{this.ratingId.feedback}}</div>
+                            {{else}}
+                            <form method="POST" action="/admin/feedback/{{this.ratingId._id}}">
+
+                                <input id="feedback" name="feedback" style="width: 90%; padding:8px" >
+
+                                <button type="submit" class="btn btn-click btn-cart">Gửi</button>
+                            </form>
+                            {{/if}}
+                        </div>
+                        {{/if}}
+                        {{#unless ../isAuthenticatedAdmin}}
+                        {{#if this.ratingId.feedback}}
+                        <div
+                            style="background-color: antiquewhite; margin-left: 10%; padding:10px;">
+                            <p style="color:rgb(199, 65, 145); font-weight: 500; margin-bottom: 10px">Phản hồi của người bán</p>
+                            <div style="font-size: 14px;">{{this.ratingId.feedback}}</div>
+                        </div>
+                        {{else}}
+                        {{/if}}
+                        {{/unless}}
+
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+
+    const tabs = $$('.tab-link');
+    const panes = $$('.tab-pane');
+
+    tabs.forEach((tab, index) => {
+        const pane = panes[index]
+
+        tab.onclick = function () {
+            $('.tab-link.active').classList.remove('active');
+            $('.tab-pane.active').classList.remove('active');
+
+            this.classList.add('active')
+            pane.classList.add('active')
+
+        }
+    })
+
+
+
+    const result = $('#quantity')
+    const qty_minus = $('.qty-minus')
+    const qty_plus = $('.qty-plus')
+
+    qty_minus.onclick = function () {
+        if (!isNaN(result.value) && result.value > 1) {
+            return result.value--
+        }
+        else false
+    }
+    qty_plus.onclick = function () {
+        if (!isNaN(result.value)) {
+            return result.value++
+        }
+        else false
+
+    }
+
+</script>
+
+
+
+<style>
+    .rating {
+        display: flex;
+        padding: 0;
+        margin: 0;
+    }
+
+    .rating li {
+        list-style-type: none
+    }
+
+    .rating-item {
+        border: 1px solid #fff;
+        font-size: 2em;
+        color: yellow;
+    }
+
+    /* initial: make all stars full */
+    .rating-item::before {
+        content: "\2605";
+    }
+
+    /* make until the clicked star (the rest) empty */
+    .rating-item.active~.rating-item::before {
+        content: "\2606";
+    }
+
+    /* on hover make all full */
+
+    .rating-item::before {
+        content: "\2605";
+    }
+
+    /* make until the hovered (the rest) empty */
+    ~.rating-item::before {
+        content: "\2606";
+    }
+</style>

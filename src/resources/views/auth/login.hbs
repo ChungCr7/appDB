@@ -1,0 +1,33 @@
+<div class="body" style="margin: 200px 35%; border: 1px solid rgb(36, 202, 72); width: 500px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+    <div class="container-form" style="padding: 50px;">
+        <h1 style="text-align: center;">Đăng nhập</h1>
+        <p style="text-align: center; font-weight: 350; font-size: 15px; margin-bottom: 25px">
+            Nếu bạn đã có tài khoản, đăng nhập tại đây
+        </p>
+        {{#if errorMessage}}
+        <div class="user-message-error">
+            {{errorMessage}}</div>
+        {{/if}}
+
+        <form class="login-form" action="/dang-nhap" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control form-auth" id="email" name="email"
+                    value="{{oldInput.email}}"></input>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control form-auth" id="password" name="password"
+                    value="{{oldInput.password}}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+        <div style="margin-top:5px">
+            <a style="color: red;" href="/dat-lai-mat-khau">Quên mật khẩu</a>
+        </div>
+        <div style="margin-top: 20px;">
+            <p>Không có tài khoản? <a href="/dang-ky" style="color: rgb(136, 0, 255);">Đăng ký</a></p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,237 @@
+<div class="body">
+  <div class="content-page">
+    <div class="title-nav-page">
+      <p class="title-page">
+        Đăng sản phẩm
+      </p>
+      <ol class="nav-page">
+        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Đăng sản phẩm</li>
+      </ol>
+    </div>
+  </div>
+  <div class="body-admin">
+    {{#if errorMessage}}
+      <div class="user-message-error">
+        {{errorMessage}}</div>
+    {{/if}}
+    <form method="POST" action="/admin/store" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name" class="label-name">Tên sản phẩm</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="{{oldInput.name}}"
+          required
+        />
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Loại sản phẩm:</legend>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios1"
+                value="rau củ"
+                required
+              />
+              <label class="form-check-label" for="gridRadios1">
+                rau củ
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios2"
+                value="sinh tố"
+                required
+              />
+              <label class="form-check-label" for="gridRadios2">
+                sinh tố
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios3"
+                value="thực phẩm tươi sống"
+                required
+              />
+              <label class="form-check-label" for="gridRadios3">
+                thực phẩm tươi sống
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios4"
+                value="hoa quả"
+                required
+              />
+              <label class="form-check-label" for="gridRadios4">
+                hoa quả
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios5"
+                value="các loại hạt"
+                required
+              />
+              <label class="form-check-label" for="gridRadios5">
+                các loại hạt
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios6"
+                value="gia vị"
+                required
+              />
+              <label class="form-check-label" for="gridRadios6">
+                gia vị
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios7"
+                value="ngũ cốc"
+                required
+              />
+              <label class="form-check-label" for="gridRadios7">
+                ngũ cốc
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="product_type"
+                id="gridRadios8"
+                value="siêu thực phẩm"
+                required
+              />
+              <label class="form-check-label" for="gridRadios8">
+                siêu thực phẩm
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <label for="description">Mô tả</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          style="height: 230px;"
+          required
+        >{{oldInput.description}}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="price">Giá (VNĐ)</label>
+        <input
+          type="number"
+          class="form-control"
+          id="price"
+          name="price"
+          value="{{oldInput.price}}"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="thuong_hieu">Thương hiệu</label>
+        <input
+          type="text"
+          class="form-control"
+          id="thuong_hieu"
+          name="thuong_hieu"
+          value="{{oldInput.thuong_hieu}}"
+          required
+        />
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">Tình trạng</legend>
+          <div class="col-sm-10">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="tinh_trang"
+                id="gridRadios-1"
+                value="Còn hàng"
+                required
+              />
+              <label class="form-check-label" for="gridRadios-1">
+                Còn hàng
+              </label>
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="tinh_trang"
+                id="gridRadios-2"
+                value="Hết hàng"
+                required
+              />
+              <label class="form-check-label" for="gridRadios-2">
+                Hết hàng
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <label for="img">Ảnh minh họa (Vui lòng chọn 4 ảnh)</label>
+        <input type="file" class="form-control" id="img" name="img" multiple />
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="preview-images"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-click btn-cart btn-add">Thêm sản phẩm</button>
+    </form>
+  </div>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+  crossorigin="anonymous"
+></script>
+<script>
+  $(document).ready(function () { function imagesPreview(input,
+  placeToInsertImagePreview) { if (input.files && input.files.length > 0) { let
+  filesAmount = input.files.length; let previewContainer =
+  $(placeToInsertImagePreview); // Xóa ảnh cũ trước khi thêm ảnh mới
+  previewContainer.empty(); for (let i = 0; i < filesAmount; i++) { let reader =
+  new FileReader(); reader.onload = function (event) { let imgElement =
+  $("<img>") .attr("src", event.target.result) .css({ width: "100px", height:
+  "100px", margin: "5px", borderRadius: "5px" });
+  previewContainer.append(imgElement); }; reader.readAsDataURL(input.files[i]);
+  } } } $("#img").on("change", function () { imagesPreview(this,
+  ".preview-images"); }); });
+</script>

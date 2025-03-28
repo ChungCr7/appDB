@@ -1,0 +1,111 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Bài đăng của tôi
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Bài đăng của tôi</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="div-content">
+        <div class="div-trash">
+            <button type="button" class="btn btn-secondary btn-trash" data-toggle="tooltip" data-placement="right"
+                title="Thùng rác">
+                <a class="oi oi-trash" href="/admin/trash/news">({{deletedCount}})</a>
+            </button>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        ID
+                    </th>
+                    <th scope="col">
+                        Tiêu đề
+                    </th>
+                    <th scope="col"></th>
+                    <th scope="col" colspan="">Thời gian tạo{{{sortable 'createdAt' _sort}}}</th>
+                    <th scope="col" class="action">Thao tác</th>
+
+                </tr>
+            </thead>
+            <tbody class="list-story">
+                {{#each stories}}
+                <tr>
+                    <th scope="row">
+                        {{this._id}}
+                    </th>
+                    <td>{{this.title}}</td>
+                    <td>
+                        <img class="card-img-top img-story-admin" src="/{{this.imgStory}}" alt="{{this.title}}">
+                    </td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href="/admin/news/{{this._id}}/edit" class="btn btn-click btn-cart">Sửa</a>
+                        <a href="" class="btn btn-click btn-remove" data-toggle="modal" data-id="{{this._id}}"
+                            data-target="#delete-product-modal">Xóa</a>
+                    </td>
+                </tr>
+
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center not-post">
+                        Bạn chưa đăng bài nào.
+                        <a href="/admin/news/create">Tạo bài đăng</a>
+                    </td>
+                </tr>
+
+                {{/each}}
+            </tbody>
+        </table>
+        <div id="delete-product-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Xóa bài đăng?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạc chắc chắn muốn xóa bài đăng này</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                  
+                        <button id="btn-delete-product" type="button" class="btn btn-danger">Xóa bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<form name="delete-product-form" method="POST"></form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var productId;
+        var deleteForm = document.forms['delete-product-form']
+        //var containerForm = document.forms['container-form']
+        var btnDeleteproduct = document.getElementById('btn-delete-product')
+
+        // When dialog confirm clicked
+        $('#delete-product-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            productId = button.data('id')
+        })
+
+        btnDeleteproduct.onclick = function () {
+            deleteForm.action = '/admin/news/' + productId + '?_method=DELETE'
+            deleteForm.submit()
+        }
+    })
+
+</script>

@@ -1,0 +1,42 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Tài khoản của tôi
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tài khoản</li>
+            </ol>
+        </div>
+    </div>
+
+    <div style="margin: 0 30%; border-right: solid 1px rgb(7, 173, 43); border-left: solid 1px rgb(7, 173, 43)">
+        <form method="POST" action="/tai-khoan" style="padding: 0 10px;">
+            <div class="form-group" style="margin-top: 45px; background-color: rgba(0,0,0,.03);">
+                <label for="full_name">Họ và tên:</label>
+                <input type="text" class="form-control" id="full_name" name="full_name"
+                    value="{{user.full_name}}" required>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label>Email:</label>
+                <div>{{user.email}}</div>
+            </div>
+
+            <div class="form-group" style="background-color: rgba(0,0,0,.03);">
+                <label for="phone_number">Số điện thoại:</label>
+                <input type="text" class="form-control" id="phone_number" name="phone_number"
+                    value="{{user.phone_number}}" required>
+            </div>
+
+            <div class="form-group" style="background-color: rgba(0,0,0,.03);">
+                <label for="address">Địa chỉ:</label>
+                <input type="text" class="form-control" id="address" name="address"
+                    value="{{user.address}}" required>
+            </div>
+
+            <button type="submit" class="btn btn-click btn-cart">Lưu</button>
+        </form>
+    </div>
+</div>

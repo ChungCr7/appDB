@@ -1,0 +1,75 @@
+<div class="body"
+    style="margin: 200px 35%; border: 1px solid rgb(36, 202, 72); width: 500px; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);">
+    <div class="container-form" style="padding: 50px;">
+        <h1 style="text-align: center;">Đăng ký</h1>
+        <p style="text-align: center; font-weight: 350; font-size: 15px; margin-bottom: 25px">
+            Nếu bạn chưa có tài khoản, đăng ký tại đây
+        </p>
+        {{#if errorMessage}}
+        <div class="user-message-error">{{errorMessage}}</div>
+        {{/if}}
+        <form class="login-form" action="/dang-ky" method="POST" novalidate>
+            <div class="form-group">
+                <label for="full_name">Họ và tên</label>
+                <input class="form-control form-auth" type="text" id="full_name" name="full_name"
+                    value="{{oldInput.full_name}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control form-auth" type="email" id="email" name="email"
+                    value="{{oldInput.email}}" required>
+            </div>
+            <div class="form-group" style="position: relative;">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control form-auth" id="password" name="password" required>
+                <span onclick="togglePassword('password', this)" 
+                    style="position: absolute; right: 10px; top: 38px; cursor: pointer;">
+                    👁️
+                </span>
+            </div>
+
+            <div class="form-group" style="position: relative;">
+                <label for="confirmPassword">Xác nhận mật khẩu</label>
+                <input type="password" class="form-control form-auth" id="confirmPassword" name="confirmPassword" required>
+                <span onclick="togglePassword('confirmPassword', this)" 
+                    style="position: absolute; right: 10px; top: 38px; cursor: pointer;">
+                    👁️
+                </span>
+            </div>
+
+
+            <div class="form-group">
+                <label for="phone_number">Số điện thoại</label>
+                <input class="form-control form-auth" type="text" id="phone_number" name="phone_number"
+                    value="{{oldInput.phone_number}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input class="form-control form-auth" type="text" id="address" name="address"
+                    value="{{oldInput.address}}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="country">Quốc gia</label>
+                <input class="form-control form-auth" type="text" id="country" name="country"
+                    value="{{oldInput.country}}" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </form>
+    </div>
+</div>
+<script>
+    function togglePassword(fieldId, icon) {
+        const field = document.getElementById(fieldId);
+        if (field.type === "password") {
+            field.type = "text";
+            icon.textContent = '🙈'; // đổi icon khi đang show
+        } else {
+            field.type = "password";
+            icon.textContent = '👁️'; // đổi icon khi đang ẩn
+        }
+    }
+</script>

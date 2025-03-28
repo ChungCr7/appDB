@@ -1,0 +1,345 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Quản lý đơn hàng
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Quản lý đơn hàng</li>
+            </ol>
+        </div>
+    </div>
+    <div style="margin: 0 5%;">
+        <a class="btn btn-back" href="/" style="margin: 25px 13px;">
+            <span class="oi oi-arrow-left">
+            </span>
+            Quay lại cửa hàng
+        </a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Mã đơn hàng
+                    </th>
+                    <th scope="col">
+                        Nguời nhận{{{sortable 'name' _sort}}}
+                    </th>
+                    <th scope="col">Sản phẩm</th>
+                    <th scope="col">SĐT</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">
+                        Tổng tiền(VNĐ)
+                        {{{sortable 'tong_tien' _sort}}}
+                    </th>
+                    <th scope="col">
+                        Thời gian đặt hàng
+                        {{{sortable 'createdAt' _sort}}}
+                    </th>
+                    <th scope="col">Trạng thái{{{sortable 'status' _sort}}}</th>
+                    <th scope="col">Cập nhật trạng thái</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <th scope="row">{{this._id}}</th>
+                    <td>{{this.name}}</td>
+                    <td>
+                        {{#each products}}{{user}}
+                        <div style="display: flex; margin: 5px 0">
+                            <div>
+                                <img src="/{{this.product.img.[3]}}" alt="" style="width: 40px;">
+                            </div>
+                            <div style="margin-left: 5px">{{this.product.name}}: Số lượng {{this.quantity}}</div>
+                        </div>
+                        {{/each}}
+                    </td>
+                    <td>{{this.phone}}</td>
+                    <td>{{this.address}}</td>
+                    <td>{{this.tong_tien}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>{{this.status}}</td>
+                    <td>
+                        <div>
+                            <a href="" class="btn btn-status btn-primary" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#da-dat-hang-modal">Chờ xác nhận</a>
+                            <a href="" class="btn btn-status btn-secondary" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#van-chuyen-modal">Vận chuyển</a>
+                            <a href="" class="btn btn-status btn-success" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#dang-giao-modal">Đang giao</a>
+                        </div>
+                        <div style="margin-top: 4px;">
+                            <a href="" class="btn btn-status btn-info" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#hoan-thanh-modal">Hoàn thành</a>
+                            <a href="" class="btn btn-status btn-danger" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#da-huy-modal">Đã hủy</a>
+                            <a href="" class="btn btn-status btn-warning" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#tra-hang-modal">Trả hàng</a>
+                        </div>
+                    </td>
+                </tr>
+
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Bạn chưa có đơn đặt hàng nào.
+                        <a href="/">Quay lại cửa hàng</a>
+                    </td>
+                </tr>
+
+                {{/each}}
+            </tbody>
+        </table>
+
+        <div id="da-dat-hang-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Chờ xác nhận</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-da-dat-hang" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="van-chuyen-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Vận chuyển</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-van-chuyen" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dang-giao-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Đang giao</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-dang-giao" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hoan-thanh-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Hoàn thành</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-hoan-thanh" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="da-huy-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Đã hủy</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-da-huy" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tra-hang-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cập nhật trạng thái</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="display: flex;">
+                        <p>Bạn chắc chắn muốn cập nhật trạng thái thành:&#160;</p>
+                        <p style="color: #e407a4;">Trả hàng</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-tra-hang" type="button" class="btn btn-click btn-cart">Cập nhật</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form name="van-chuyen-form" method="POST">
+    <input type="hidden" name="status" value="Vận chuyển">
+</form>
+<form name="da-dat-hang-form" method="POST">
+    <input type="hidden" name="status" value="Chờ xác nhận">
+</form>
+<form name="dang-giao-form" method="POST">
+    <input type="hidden" name="status" value="Đang giao">
+</form>
+<form name="hoan-thanh-form" method="POST">
+    <input type="hidden" name="status" value="Hoàn thành">
+</form>
+<form name="da-huy-form" method="POST">
+    <input type="hidden" name="status" value="Đã hủy">
+</form>
+<form name="tra-hang-form" method="POST">
+    <input type="hidden" name="status" value="Trả hàng">
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var dadathangForm = document.forms['da-dat-hang-form']
+        var btnDadathang = document.getElementById('btn-da-dat-hang')
+
+        // When dialog confirm clicked
+        $('#da-dat-hang-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnDadathang.onclick = function () {
+            dadathangForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            dadathangForm.submit()
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var vanchuyenForm = document.forms['van-chuyen-form']
+        var btnVanchuyen = document.getElementById('btn-van-chuyen')
+
+        // When dialog confirm clicked
+        $('#van-chuyen-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnVanchuyen.onclick = function () {
+            vanchuyenForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            vanchuyenForm.submit()
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var danggiaoForm = document.forms['dang-giao-form']
+        var btnDanggiao = document.getElementById('btn-dang-giao')
+
+        // When dialog confirm clicked
+        $('#dang-giao-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnDanggiao.onclick = function () {
+            danggiaoForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            danggiaoForm.submit()
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var hoanthanhForm = document.forms['hoan-thanh-form']
+        var btnHoanthanh = document.getElementById('btn-hoan-thanh')
+
+        // When dialog confirm clicked
+        $('#hoan-thanh-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnHoanthanh.onclick = function () {
+            hoanthanhForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            hoanthanhForm.submit()
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var dahuyForm = document.forms['da-huy-form']
+        var btnDahuy = document.getElementById('btn-da-huy')
+
+        // When dialog confirm clicked
+        $('#da-huy-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnDahuy.onclick = function () {
+            dahuyForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            dahuyForm.submit()
+        }
+    })
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderId;
+        var trahangForm = document.forms['tra-hang-form']
+        var btnTrahang = document.getElementById('btn-tra-hang')
+
+        // When dialog confirm clicked
+        $('#tra-hang-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            orderId = button.data('id')
+        })
+
+        btnTrahang.onclick = function () {
+            trahangForm.action = '/admin/order/' + orderId + '?_method=PUT'
+            trahangForm.submit()
+        }
+    }) 
+</script>

@@ -1,0 +1,41 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Tin tức
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tin tức</li>
+            </ol>
+        </div>
+    </div>
+
+    <div style="margin: 70px 15% 0 15%;">
+        <div class="row" style="">
+            {{#each stories}}
+            <div class="col-sm-6 col-lg-4 card-news" style="width: 340px; margin-bottom: 30px;">
+                <div class="card-deck">
+                    <div class="card card-tin-tuc">
+                        <a href="/tin-tuc/{{this.slug}}">
+                            <img class="card-img-top" src="/{{this.imgStory}}" alt=""
+                                style="height: 340px">
+                        </a>
+                        <div class="card-body" style="background-color: #f5f6fb;">
+                            <a href="/tin-tuc/{{this.slug}}" style="color: black;">
+                                <h5 class="card-title" style="font-size: 17px; text-transform: uppercase;">
+                                    {{this.title}}</h5>
+                            </a>
+                            <div class="card-body-content">
+                                {{{this.content}}}
+                            </div>
+                            <p class="card-text oi oi-calendar"><small class="text-muted">{{this.createdAt}}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+</div>

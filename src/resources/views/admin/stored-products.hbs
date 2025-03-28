@@ -1,0 +1,226 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Sản phẩm của tôi
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Sản phẩm của tôi</li>
+            </ol>
+        </div>
+    </div>
+    <div class="div-content">
+        <form name="container-form" method="POST" action="/admin/handle-form-actions">
+            <div class="div-trash">
+                <button type="button" class="btn btn-secondary btn-trash" data-toggle="tooltip" data-placement="right"
+                    title="Thùng rác">
+                    <a class="oi oi-trash" href="/admin/trash/products">({{deletedCount}})</a>
+                </button>
+            </div>
+
+            <div class="d-flex align-items-center" style="margin-bottom: 15px;">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+                    <label class="form-check-label" for="checkbox-all" style="margin-right: 15px;">
+                        Chọn tất cả
+                    </label>
+                </div>
+
+                <select class="form-control form-control-sm checkbox-select-all-options" name="action" required>
+                    <option value="">--hành động--</option>
+                    <option value="delete">Xóa</option>
+                </select>
+
+                <button class="btn btn-primary btn-sm check-all-submit-btn" disabled>Thực hiện</button>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col">
+                            ID
+                            {{{sortable '_id' _sort}}}
+                        </th>
+                        <th scope="col">
+                            Tên sản phẩm
+                            {{{sortable 'name' _sort}}}
+                        </th>
+                        <th scope="col"></th>
+                        <th scope="col">
+                            Loại sản phẩm
+                            {{{sortable 'product_type' _sort}}}
+                        </th>
+                        <th scope="col">
+                            Giá
+                            {{{sortable 'price' _sort}}}
+                        </th>
+                        <th scope="col" colspan="">Thời gian tạo{{{sortable 'createdAt' _sort}}}</th>
+                        <th scope="col" class="action">Thao tác</th>
+
+                    </tr>
+                </thead>
+                <tbody class="list-prod">
+                    {{#each products}}
+                    <tr>
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="productIds[]"
+                                    value="{{this._id}}">
+                            </div>
+                        </td>
+                        <th scope="row">{{this._id}}</th>
+                        <td>{{this.name}}</td>
+                        <td>
+                            <img class="card-img-top img-prod-admin" src="/{{this.img.[3]}}" alt="{{this.name}}">
+                        </td>
+                        <td>{{this.product_type}}</td>
+                        <td>{{this.price}}</td>
+                        <td>{{this.createdAt}}</td>
+                        <td>
+                            <a href="/admin/{{this._id}}/edit" class="btn btn-click btn-cart">Sửa</a>
+                            <a href="" class="btn btn-click btn-remove" data-toggle="modal" data-id="{{this._id}}"
+                                data-target="#delete-product-modal">Xóa</a>
+                        </td>
+                    </tr>
+
+                    {{else}}
+                    <tr>
+                        <td colspan="5" class="text-center not-list">
+                            Bạn chưa đăng sản phẩm nào.
+                            <a href="/admin/create">Đăng sản phẩm</a>
+                        </td>
+                    </tr>
+
+                    {{/each}}
+                </tbody>
+            </table>
+        </form>
+
+
+        {{!-- confirm delete product --}}
+        <div id="delete-product-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Xóa sản phẩm?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Bạc chắc chắn muốn xóa sản phẩm này</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                        <button id="btn-delete-product" type="button" class="btn btn-danger">Xóa bỏ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-label="Page navigation example" style="margin: 30px 20% 0 20%;">
+        <ul class="pagination">
+            <li class="page-item">
+                {{#if hasPreviousPage}}
+                <a class="page-link" href="/admin/stored/products/?page={{previousPage}}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                {{/if}}
+            </li>
+
+            {{#if (sub currentPage 1) }}
+            {{#if (sub previousPage 1) }}
+            <li class="page-item"><a class="page-link" href="/admin/stored/products/?page=1">1</a></li>
+            {{/if}}
+            {{/if}}
+
+            {{#if hasPreviousPage}}
+            <li class="page-item"><a class="page-link"
+                    href="/admin/stored/products/?page={{previousPage}}">{{previousPage}}</a>
+            </li>
+            {{/if}}
+
+            <li class="page-item"><a class="page-link"
+                    href="/admin/stored/products/?page={{currentPage}}">{{currentPage}}</a></li>
+
+            {{#if hasNextPage}}
+            <li class="page-item"><a class="page-link" href="/admin/stored/products/?page={{nextPage}}">{{nextPage}}</a>
+            </li>
+            {{/if}}
+
+            {{#if (sub lastPage currentPage) }}
+            {{#if (sub nextPage lastPage) }}
+            <li class="page-item"><a class="page-link" href="/admin/stored/products/?page={{lastPage}}">{{lastPage}}</a>
+            </li>
+            {{/if}}
+            {{/if}}
+
+            <li class="page-item">
+                {{#if hasNextPage}}
+                <a class="page-link" href="/admin/stored/products/?page={{nextPage}}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+                {{/if}}
+            </li>
+        </ul>
+    </div>
+</div>
+
+{{!-- Delete hidden form --}}
+<form name="delete-product-form" method="POST"></form>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var productId;
+        var deleteForm = document.forms['delete-product-form']
+        //var containerForm = document.forms['container-form']
+        var btnDeleteproduct = document.getElementById('btn-delete-product')
+        var checkboxAll = $('#checkbox-all')
+        var productItemCheckbox = $('input[name="productIds[]"]')
+        var checkAllSubmitBtn = $('.check-all-submit-btn')
+
+        // When dialog confirm clicked
+        $('#delete-product-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            productId = button.data('id')
+        })
+
+        btnDeleteproduct.onclick = function () {
+            deleteForm.action = '/admin/' + productId + '?_method=DELETE'
+            deleteForm.submit()
+        }
+
+        //checkbox all changed
+        checkboxAll.change(function () {
+            var isCheckedAll = $(this).prop('checked')
+            productItemCheckbox.prop('checked', isCheckedAll)
+            renderCheckAllSubmitBtn()
+        })
+
+        // product item checkbox changed
+        productItemCheckbox.change(function () {
+            var isCheckedAll = productItemCheckbox.length === $('input[name="productIds[]"]:checked').length
+            checkboxAll.prop('checked', isCheckedAll)
+            renderCheckAllSubmitBtn()
+        })
+
+
+
+        //Re-render check all submit button
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="productIds[]"]:checked').length
+            if (checkedCount > 0) {
+                checkAllSubmitBtn.attr('disabled', false)
+            } else {
+                checkAllSubmitBtn.attr('disabled', true)
+            }
+        }
+    })
+
+</script>

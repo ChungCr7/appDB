@@ -1,0 +1,79 @@
+<div class="body">
+    <div class="content-page">
+        <div class="title-nav-page">
+            <p class="title-page">
+                Đơn hàng của tôi
+            </p>
+            <ol class="nav-page">
+                <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Đơn hàng của tôi</li>
+            </ol>
+        </div>
+    </div>
+    <div style="margin: 0 5%;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Mã đơn hàng
+                    </th>
+                    <th scope="col">Sản phẩm</th>
+                    <th scope="col">Tên người nhận hàng</th>
+                    <th scope="col">SĐT</th>
+                    <th scope="col">Địa chỉ</th>
+                    <th scope="col">
+                        Tổng tiền(VNĐ)
+                    </th>
+                    <th scope="col">
+                        Thời gian đặt hàng
+                    </th>
+                    <th scope="col">Trạng thái</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {{#each orders}}
+                <tr>
+                    <th scope="row">{{this._id}}</th>
+                    <td>
+                        {{#each products}}
+                        <form action="/danh-gia/{{this.product.slug}}" method="GET">
+                            <div style="display: flex; margin: 5px 0">
+                                <div>
+                                    <img src="/{{this.product.img.[3]}}" alt="" style="height: 50px; margin: 7px">
+                                </div>
+                                <div>
+                                    <div>{{this.product.name}}: Số lượng {{this.quantity}}</div>
+                                    <button class="btn btn-purchase btn-success" type="submit"
+                                        style="font-size: 13px;">Đánh
+                                        giá</button>
+                                </div>
+                            </div>
+                        </form>
+                        {{/each}}
+                    </td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.phone}}</td>
+                    <td>{{this.address}}</td>
+                    <td>{{this.tong_tien}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>{{this.status}}</td>
+                    <td>
+                        <div>
+                        </div>
+                    </td>
+                </tr>
+
+                {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Bạn chưa có đơn đặt hàng nào.
+                        <a href="/" style="color:rgb(185, 22, 122)">Quay lại cửa hàng</a>
+                    </td>
+                </tr>
+
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
