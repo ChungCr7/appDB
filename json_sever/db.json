@@ -1,0 +1,9 @@
+{
+    "courses": [
+        {
+            "id": 1,
+            "name": "kiến thức cơ bản",
+            "description": "kiến thức cơ bản dành cho người mới"
+        }
+    ]
+}
