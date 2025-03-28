@@ -1,9 +1,10 @@
 require('dotenv').config();
-const crypto = require('crypto')
-const bcrypt = require('bcryptjs')
-const nodemailer = require('nodemailer')
-const sendgridTransport = require('nodemailer-sendgrid-transport')
-const { validationResult } = require('express-validator/check')
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
+const sendgridTransport = require('nodemailer-sendgrid-transport');
+const { validationResult } = require('express-validator/check');
+const axios = require('axios');
 
 const User = require('../models/User');
 
@@ -24,7 +25,6 @@ class AuthController {
                 confirmPassword: ''
             },
             validationErrors: []
-
         });
     }
 
@@ -32,40 +32,36 @@ class AuthController {
         const email = req.body.email;
         const password = req.body.password;
         const errors = validationResult(req);
-    
+
         if (!errors.isEmpty()) {
             return res.status(422).render('auth/login', {
                 errorMessage: errors.array()[0].msg,
-                oldInput: { email: email, password: password },
+                oldInput: { email, password },
                 validationErrors: errors.array()
             });
         }
-    
-        // Tìm trong MongoDB trước
+
         User.findOne({ email: email })
             .then(user => {
                 if (!user) {
-                    // Nếu không có user trong local MongoDB → thử gọi API từ render
-                    const axios = require('axios');
+                    // Nếu không có trong MongoDB → check API render
                     return axios.get('https://gkiltdd.onrender.com/api/users/')
                         .then(response => {
                             const users = response.data;
                             const apiUser = users.find(u => u.email === email && u.password === password);
-    
+
                             if (!apiUser) {
-                                // Không tồn tại user
                                 return res.status(422).render('auth/login', {
                                     errorMessage: 'Email hoặc mật khẩu không hợp lệ!',
-                                    oldInput: { email: email, password: password },
+                                    oldInput: { email, password },
                                     validationErrors: []
                                 });
                             }
-    
-                            // Lưu thông tin tạm vào session (tùy bạn muốn xử lý gì tiếp theo)
+
                             req.session.isLoggedIn = true;
                             req.session.user = apiUser;
                             req.session.role = apiUser.role || 2;
-    
+
                             return req.session.save(() => {
                                 res.redirect('/');
                             });
@@ -75,23 +71,23 @@ class AuthController {
                             res.redirect('/dang-nhap');
                         });
                 }
-    
-                // Nếu có user trong MongoDB → xác thực bằng bcrypt
+
+                // Nếu có user trong MongoDB → dùng bcrypt để xác thực
                 bcrypt.compare(password, user.password)
                     .then(doMatch => {
                         if (doMatch) {
                             req.session.isLoggedIn = true;
                             req.session.user = user;
                             req.session.role = user.role;
-    
+
                             return req.session.save(() => {
                                 res.redirect('/');
                             });
                         }
-    
+
                         return res.status(422).render('auth/login', {
                             errorMessage: 'Email hoặc mật khẩu không hợp lệ!',
-                            oldInput: { email: email, password: password },
+                            oldInput: { email, password },
                             validationErrors: []
                         });
                     })
@@ -101,11 +97,11 @@ class AuthController {
             })
             .catch(next);
     }
-    
+
     postLogout(req, res, next) {
         req.session.destroy(() => {
-            res.redirect('/')
-        })
+            res.redirect('/');
+        });
     }
 
     getSignup(req, res, next) {
@@ -120,7 +116,6 @@ class AuthController {
             validationErrors: []
         });
     }
-    
 
     postSignup(req, res, next) {
         const full_name = req.body.full_name;
@@ -129,7 +124,7 @@ class AuthController {
         const phone_number = req.body.phone_number || '';
         const address = req.body.address || '';
         const country = req.body.country || 'Vietnam';
-    
+
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).render('auth/signup', {
@@ -146,29 +141,28 @@ class AuthController {
                 validationErrors: errors.array()
             });
         }
-    
-        const axios = require('axios');
-    
+
         bcrypt.hash(password, 12)
             .then(hashedPassword => {
                 const user = new User({
-                    full_name: full_name,
-                    email: email,
+                    full_name,
+                    email,
                     password: hashedPassword,
-                    role: 2,
+                    role: 2, // 👈 Thêm role mặc định
                     cart: { items: [] }
                 });
-    
+
                 return user.save().then(() => {
-                    // Gửi thông tin sang API render
+                    // Gửi user lên API Render (có role luôn)
                     return axios.post('https://gkiltdd.onrender.com/api/users/create', {
                         id: Date.now().toString(),
-                        full_name: full_name,
-                        email: email,
-                        password: password,
-                        phone_number: phone_number,
-                        address: address,
-                        country: country
+                        full_name,
+                        email,
+                        password,
+                        phone_number,
+                        address,
+                        country,
+                        role: 2  // 👈 Gửi role lên API
                     });
                 });
             })
@@ -183,8 +177,7 @@ class AuthController {
             })
             .catch(error => {
                 console.error('❌ Lỗi trong quá trình đăng ký:', error.message);
-            
-                // In rõ lỗi từ phía server Render
+
                 if (error.response) {
                     console.error('🔍 Lỗi chi tiết từ API Render:', error.response.data);
                     console.error('📦 Status code:', error.response.status);
@@ -194,7 +187,7 @@ class AuthController {
                 } else {
                     console.error('⚙️ Lỗi cấu hình:', error.message);
                 }
-            
+
                 return res.status(500).render('auth/signup', {
                     errorMessage: 'Lỗi máy chủ. Vui lòng thử lại.',
                     oldInput: {
@@ -210,89 +203,87 @@ class AuthController {
                 });
             });
     }
-    
 
     getReset(req, res, next) {
         res.render('auth/reset', {
             errorMessage: req.flash('error')
-        })
+        });
     }
 
     postReset(req, res, next) {
         crypto.randomBytes(32, (err, buffer) => {
             if (err) {
-                console.log(err)
-                return res.redirect('/dat-lai-mat-khau')
+                console.log(err);
+                return res.redirect('/dat-lai-mat-khau');
             }
-            const token = buffer.toString('hex')
+            const token = buffer.toString('hex');
             User.findOne({ email: req.body.email })
                 .then(user => {
                     if (!user) {
-                        req.flash('error', 'Không tìm thấy tài khoản')
-                        return res.redirect('/dat-lai-mat-khau')
+                        req.flash('error', 'Không tìm thấy tài khoản');
+                        return res.redirect('/dat-lai-mat-khau');
                     }
-                    user.resetToken = token
-                    user.resetTokenExpiration = Date.now() + 360000
-                    return user.save()
+                    user.resetToken = token;
+                    user.resetTokenExpiration = Date.now() + 360000;
+                    return user.save();
                 })
                 .then(result => {
-                    res.redirect('/')
+                    res.redirect('/');
                     transporter.sendMail({
                         to: req.body.email,
                         from: 'mvt16102001@gmail.com',
                         subject: 'Đặt lại mật khẩu',
                         html: `
-                        <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu của bạn</p>
-                        <p>Click vào <a href="http://localhost:3000/dat-lai-mat-khau/${token}">Đây</a> để đặt mật khẩu mới</p>
+                            <p>Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu của bạn</p>
+                            <p>Click vào <a href="http://localhost:3000/dat-lai-mat-khau/${token}">Đây</a> để đặt mật khẩu mới</p>
                         `
-                    })
+                    });
                 })
                 .catch(err => {
-                    console.log(err)
-                })
-        })
+                    console.log(err);
+                });
+        });
     }
 
     getNewPassword(req, res, next) {
-        const token = req.params.token
+        const token = req.params.token;
         User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
             .then(user => {
                 res.render('auth/new-password', {
                     errorMessage: req.flash('error'),
                     userId: user._id.toString(),
                     passwordToken: token
-                })
+                });
             })
-            .catch(err =>
-                console.log(err))
+            .catch(err => console.log(err));
     }
 
     postNewPassword(req, res, next) {
-        const newPassword = req.body.password
-        const userId = req.body.userId
-        const passwordToken = req.body.passwordToken
-        let resetUser
+        const newPassword = req.body.password;
+        const userId = req.body.userId;
+        const passwordToken = req.body.passwordToken;
+        let resetUser;
+
         User.findOne({
             resetToken: passwordToken,
             resetTokenExpiration: { $gt: Date.now() },
             _id: userId
         })
             .then(user => {
-                resetUser = user
-                return bcrypt.hash(newPassword, 12)
+                resetUser = user;
+                return bcrypt.hash(newPassword, 12);
             })
             .then(hashedPassword => {
-                resetUser.password = hashedPassword
-                resetUser.resetToken = undefined
-                resetUser.resetTokenExpiration = undefined
-                return resetUser.save()
+                resetUser.password = hashedPassword;
+                resetUser.resetToken = undefined;
+                resetUser.resetTokenExpiration = undefined;
+                return resetUser.save();
             })
             .then(result => {
-                res.redirect('/dang-nhap')
+                res.redirect('/dang-nhap');
             })
-            .catch(next)
+            .catch(next);
     }
-    
-}
+};
 
-module.exports = new AuthController;
+module.exports = new AuthController();
