@@ -7,7 +7,7 @@ async function importUsers() {
   try {
     await connect();
 
-    const response = await axios.get('https://gkiltdd.onrender.com/api/users/');
+    const response = await axios.get('https://appbc-jnge.onrender.com//api/users/');
     const users = response.data;
 
     for (const u of users) {

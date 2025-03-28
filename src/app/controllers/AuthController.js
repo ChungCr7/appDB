@@ -45,7 +45,7 @@ class AuthController {
             .then(user => {
                 if (!user) {
                     // Nếu không có trong MongoDB → check API render
-                    return axios.get('https://gkiltdd.onrender.com/api/users/')
+                    return axios.get('https://appbc-jnge.onrender.com//api/users/')
                         .then(response => {
                             const users = response.data;
                             const apiUser = users.find(u => u.email === email && u.password === password);
@@ -154,7 +154,7 @@ class AuthController {
 
                 return user.save().then(() => {
                     // Gửi user lên API Render (có role luôn)
-                    return axios.post('https://gkiltdd.onrender.com/api/users/create', {
+                    return axios.post('https://appbc-jnge.onrender.com//api/users/create', {
                         id: Date.now().toString(),
                         full_name,
                         email,
